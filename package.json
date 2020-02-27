@@ -4,10 +4,13 @@
   "description": "sip application",
   "main": "index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node dist/index.js",
     ".": "nodemon",
-    "build": "tsc"
+    "install:noproxy": "yarn config set proxy ''; yarn config set https-proxy ''; yarn",
+    "start:prod": "node index.js",
+    "lint": "tslint -c tslint.json -p tsconfig.json",
+    "test": "mocha --require ts-node/register 'src/**/*.spec.ts'",
+    "test:watch": "mocha --require ts-node/register --watch src/**/*.spec.ts --watch-extensions ts",
+    "build": "tsc --build tsconfig.json"
   },
   "keywords": [
     "express",
@@ -17,24 +20,17 @@
   "author": "kamalakkannan",
   "license": "ISC",
   "dependencies": {
-    "@types/bcrypt-nodejs": "0.0.30",
-    "@types/connect-redis": "^0.0.13",
-    "@types/express-session": "^1.15.16",
-    "@types/redis": "^2.8.14",
-    "bcrypt-nodejs": "0.0.3",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
-    "connect-redis": "^4.0.3",
-    "csvtojson": "^2.0.10",
     "express": "^4.17.1",
     "express-session": "^1.17.0",
     "mongoose": "^5.8.1",
-    "redis": "^2.8.0",
     "ts-node": "^8.5.4",
     "typescript": "^3.7.3"
   },
   "devDependencies": {
     "@types/express": "^4.17.2",
+    "@types/express-session": "^1.15.16",
     "@types/mongoose": "^5.5.34",
     "@types/node": "^12.12.17",
     "@types/bcrypt": "^3.0.0"

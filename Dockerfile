@@ -1,12 +1,15 @@
-FROM node
-RUN mkdir -p /usr/src/app
+FROM alpine:latest
+
+RUN apk add --no-cache nodejs yarn
+
 WORKDIR /usr/src/app
 
-#COPY node_modules node_modules
 COPY package.json .
+
 RUN yarn
+
 COPY dist .
 
-EXPOSE 443 3000
+EXPOSE 3000
 
 CMD [ "yarn", "start:prod" ]
