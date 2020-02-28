@@ -43,16 +43,30 @@ var Customer = require("../queries/customer");
  * @param res
  */
 exports.register = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user;
+    var user, err_1;
     return __generator(this, function (_a) {
-        user = req.body;
-        try {
-            return [2 /*return*/, res.status(200).send()];
+        switch (_a.label) {
+            case 0:
+                user = req.body;
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, Customer.getDomainId(req.body.domain_name).then(function (domain_id) {
+                        user.Domain_id = domain_id;
+                        var newUser = Customer.createUser(user);
+                        return res.status(200).send({ status: 201, msg: "Sip registration completed" });
+                    }).catch(function (err) {
+                        console.log(err);
+                        return res.status(400).send(err);
+                    })];
+            case 2:
+                _a.sent();
+                return [3 /*break*/, 4];
+            case 3:
+                err_1 = _a.sent();
+                return [2 /*return*/, res.status(err_1.status).send(err_1.msg)];
+            case 4: return [2 /*return*/];
         }
-        catch (err) {
-            return [2 /*return*/, res.status(err.status).send(err.msg)];
-        }
-        return [2 /*return*/];
     });
 }); };
 /**
@@ -62,7 +76,7 @@ exports.register = function (req, res) { return __awaiter(void 0, void 0, void 0
  */
 function getAll(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var users, err_1;
+        var users, err_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -72,8 +86,8 @@ function getAll(req, res) {
                     users = _a.sent();
                     return [2 /*return*/, res.status(200).send(users)];
                 case 2:
-                    err_1 = _a.sent();
-                    return [2 /*return*/, res.status(err_1.status).send(err_1.msg)];
+                    err_2 = _a.sent();
+                    return [2 /*return*/, res.status(err_2.status).send(err_2.msg)];
                 case 3: return [2 /*return*/];
             }
         });
@@ -87,7 +101,7 @@ exports.getAll = getAll;
  */
 function get(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var username, users, err_2;
+        var username, users, err_3;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -100,8 +114,8 @@ function get(req, res) {
                     users = _a.sent();
                     return [2 /*return*/, res.status(200).send(users)];
                 case 3:
-                    err_2 = _a.sent();
-                    return [2 /*return*/, res.status(err_2.status).send(err_2.msg)];
+                    err_3 = _a.sent();
+                    return [2 /*return*/, res.status(err_3.status).send(err_3.msg)];
                 case 4: return [2 /*return*/];
             }
         });

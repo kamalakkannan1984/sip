@@ -8,6 +8,6 @@ export const Routes = Router()
     .post(CUSTOMERS, Customer.register)
     .get(CUSTOMERS, Customer.getAll)
     .get(
-        `${CUSTOMERS}/:id`,
+        `${CUSTOMERS}/:username`,
         Customer.get
     );

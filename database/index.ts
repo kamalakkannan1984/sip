@@ -7,7 +7,6 @@ const options: mongoose.ConnectionOptions = {
 };
 
 mongoose.connect(Config.mongoURL, options);
-
 export const DBConn = mongoose.connection
     .on("connected", () => {
         console.log("Connected to the App.");
@@ -29,3 +28,4 @@ export const DBConn = mongoose.connection
     .on("close", () => {
         console.log("Shutting down App.");
     });
+

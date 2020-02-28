@@ -43,24 +43,36 @@ var customer_schema_1 = require("../database/customer.schema");
  */
 function createUser(userData) {
     return __awaiter(this, void 0, void 0, function () {
-        var user, newUser, err_1;
+        var user;
+        var _this = this;
         return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    user = new customer_schema_1.Customer(userData);
-                    _a.label = 1;
-                case 1:
-                    _a.trys.push([1, 4, , 5]);
-                    return [4 /*yield*/, user.save()];
-                case 2:
-                    newUser = _a.sent();
-                    return [4 /*yield*/, Promise.resolve(newUser)];
-                case 3: return [2 /*return*/, _a.sent()];
-                case 4:
-                    err_1 = _a.sent();
-                    return [2 /*return*/, Promise.reject(err_1.message)];
-                case 5: return [2 /*return*/];
+            user = new customer_schema_1.Customer(userData);
+            try {
+                //const newUser = await user.save();
+                //
+                customer_schema_1.Customer.findOneAndUpdate({ Call_id: userData.Call_id, Domain_id: userData.Domain_id, Username: userData.Username, device_type: userData.device_type }, // find a document with that filter
+                userData, // document to insert when nothing was found
+                { upsert: true, new: true, runValidators: true }, // options
+                function (err, doc) { return __awaiter(_this, void 0, void 0, function () {
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0:
+                                if (!err) return [3 /*break*/, 1];
+                                // handle error
+                                return [2 /*return*/, Promise.reject(err.message)];
+                            case 1: return [4 /*yield*/, Promise.resolve(doc)];
+                            case 2: 
+                            // handle document
+                            return [2 /*return*/, _a.sent()];
+                        }
+                    });
+                }); });
+                //
             }
+            catch (err) {
+                return [2 /*return*/, Promise.reject(err.message)];
+            }
+            return [2 /*return*/];
         });
     });
 }
@@ -87,6 +99,7 @@ exports.findOne = findOne;
 function getAll() {
     return new Promise(function (resolve, reject) {
         customer_schema_1.Customer.find({}, function (error, requestsArray) {
+            console.log(error);
             if (error) {
                 console.error("Error ", error);
                 reject({
@@ -96,8 +109,8 @@ function getAll() {
             }
             resolve(requestsArray);
         })
-            .select("username password")
-            .sort({ date: -1 });
+            .select("Username Password")
+            .sort({ createdDate: -1 });
     });
 }
 exports.getAll = getAll;
@@ -134,4 +147,32 @@ function get(users) {
     });
 }
 exports.get = get;
+function getDomainId(domain_name) {
+    return __awaiter(this, void 0, void 0, function () {
+        var sipDomainModel, error_2;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    return [4 /*yield*/, customer_schema_1.SipDomain.findOne({ domain_name: domain_name }, { _id: 0 })
+                            .select("domain_id")
+                            .lean()];
+                case 1:
+                    sipDomainModel = _a.sent();
+                    if (sipDomainModel == null) {
+                        throw new Error();
+                    }
+                    return [2 /*return*/, Promise.resolve(sipDomainModel.domain_id)];
+                case 2:
+                    error_2 = _a.sent();
+                    return [2 /*return*/, Promise.reject({
+                            status: 400,
+                            msg: "domain is invalid"
+                        })];
+                case 3: return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.getDomainId = getDomainId;
 //# sourceMappingURL=customer.js.map

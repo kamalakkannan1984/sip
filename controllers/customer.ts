@@ -10,7 +10,15 @@ import * as Customer from "../queries/customer";
 export const register = async (req: Request, res: Response) => {
     const user: CustomerModel = req.body;
     try {
-        return res.status(200).send();
+        await Customer.getDomainId(req.body.domain_name).then(domain_id => {
+            user.Domain_id = domain_id;
+            const newUser = Customer.createUser(user);
+            return res.status(200).send({ status: 201, msg: "Sip registration completed" });
+        }).catch(err => {
+            console.log(err);
+            return res.status(400).send(err);
+        });
+
     } catch (err) {
         return res.status(err.status).send(err.msg);
     }
@@ -36,7 +44,7 @@ export async function getAll(req: Request, res: Response) {
  * @param res
  */
 export async function get(req: Request, res: Response) {
-    const username = req.params.id;
+    const username = req.params.username;
     try {
         const users = await Customer.get(username);
         return res.status(200).send(users);

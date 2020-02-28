@@ -7,7 +7,7 @@ var Config = /** @class */ (function () {
     Config.httpPort = 4200;
     Config.sessionSecret = "ssecret";
     Config.sessionStoreHost = "127.0.0.1";
-    Config.mongoURL = "mongodb://10.22.7.230:27017/XGREGISTAR";
+    Config.mongoURL = "mongodb://java:javadb@10.22.7.230:27017/XGREGISTAR";
     Config.apiPrefix = "/api";
     Config.allowOriginHost = "http://localhost:3000";
     return Config;

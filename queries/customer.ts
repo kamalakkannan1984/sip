@@ -1,5 +1,8 @@
 import { CustomerModel } from "../models/customer";
-import { Customer } from "../database/customer.schema";
+import { Customer, SipDomain } from "../database/customer.schema";
+import { SipDomainModel } from "../models/sipDomain";
+
+
 
 
 /**
@@ -9,8 +12,24 @@ import { Customer } from "../database/customer.schema";
 export async function createUser(userData: CustomerModel): Promise<CustomerModel> {
     const user = new Customer(userData);
     try {
-        const newUser = await user.save();
-        return await Promise.resolve(newUser);
+        //const newUser = await user.save();
+        //
+        Customer.findOneAndUpdate(
+            { Call_id: userData.Call_id, Domain_id: userData.Domain_id, Username: userData.Username, device_type: userData.device_type }, // find a document with that filter
+            userData, // document to insert when nothing was found
+            { upsert: true, new: true, runValidators: true }, // options
+            async (err, doc) => { // callback
+                if (err) {
+                    // handle error
+                    return Promise.reject(err.message);
+                } else {
+                    // handle document
+                    return await Promise.resolve(doc);
+                }
+            }
+        );
+        //
+
     } catch (err) {
         return Promise.reject(err.message);
     }
@@ -21,7 +40,7 @@ export async function createUser(userData: CustomerModel): Promise<CustomerModel
  * @param username
  */
 export function findOne(username: any): any {
-    return Customer.findOne({ username: username }).then((userModel: any) => {
+    return Customer.findOne({ Username: username }).then((userModel: any) => {
         if (userModel === null) {
             return Promise.reject({
                 status: 400,
@@ -35,9 +54,10 @@ export function findOne(username: any): any {
 /**
  * Query for get all customer
  */
-export function getAll(): Promise<any> {
+export function getAll() {
     return new Promise((resolve, reject) => {
         Customer.find({}, (error, requestsArray) => {
+            console.log(error);
             if (error) {
                 console.error("Error ", error);
                 reject({
@@ -47,9 +67,10 @@ export function getAll(): Promise<any> {
             }
             resolve(requestsArray);
         })
-            .select("username password")
-            .sort({ date: -1 });
+            .select("Username Password")
+            .sort({ createdDate: -1 });
     });
+
 }
 
 /**
@@ -58,8 +79,8 @@ export function getAll(): Promise<any> {
  */
 export async function get(users: string): Promise<CustomerModel[]> {
     try {
-        const customerModel = await Customer.findOne({ _id: users }, { _id: 0 })
-            .select("username password")
+        const customerModel = await Customer.findOne({ Username: users }, { _id: 0 })
+            .select("Username Password")
             .lean();
         if (customerModel === null) {
             throw new Error();
@@ -70,6 +91,23 @@ export async function get(users: string): Promise<CustomerModel[]> {
             status: 400,
             msg: `Request: ${users} does not exist.`
         });
+    }
+}
+
+export async function getDomainId(domain_name: string): Promise<number> {
+    try {
+        const sipDomainModel = await SipDomain.findOne({ domain_name: domain_name }, { _id: 0 })
+            .select("domain_id")
+            .lean();
+        if (sipDomainModel == null) {
+            throw new Error();
+        }
+        return Promise.resolve(sipDomainModel.domain_id);
+    } catch (error) {
+        return Promise.reject({
+            status: 400,
+            msg: `domain is invalid`
+        })
     }
 }
 
