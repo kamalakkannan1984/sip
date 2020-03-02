@@ -2,9 +2,6 @@ import { CustomerModel } from "../models/customer";
 import { Customer, SipDomain } from "../database/customer.schema";
 import { SipDomainModel } from "../models/sipDomain";
 
-
-
-
 /**
  * Query for create user
  * @param userData
@@ -96,7 +93,7 @@ export async function get(users: string): Promise<CustomerModel[]> {
 
 export async function getDomainId(domain_name: string): Promise<number> {
     try {
-        const sipDomainModel = await SipDomain.findOne({ domain_name: domain_name }, { _id: 0 })
+        const sipDomainModel = await SipDomain.findOne({ domain_name: domain_name, active: 1 }, { _id: 0 })
             .select("domain_id")
             .lean();
         if (sipDomainModel == null) {

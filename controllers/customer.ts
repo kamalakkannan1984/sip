@@ -2,6 +2,16 @@ import { Request, Response, NextFunction } from "express";
 import { CustomerModel } from "../models/customer";
 import * as Customer from "../queries/customer";
 
+
+//START SIP USERS
+export const authenticate = async (req: Request, res: Response) => {
+    try {
+        return res.status(200).send();
+    } catch (err) {
+        return res.status(err.status).send(err.msg);
+    }
+}
+
 /**
  * Register a new customer
  * @param req
@@ -12,6 +22,8 @@ export const register = async (req: Request, res: Response) => {
     try {
         await Customer.getDomainId(req.body.domain_name).then(domain_id => {
             user.Domain_id = domain_id;
+            user.Registered_date = new Date();
+            user.last_update = new Date();
             const newUser = Customer.createUser(user);
             return res.status(200).send({ status: 201, msg: "Sip registration completed" });
         }).catch(err => {
@@ -23,6 +35,61 @@ export const register = async (req: Request, res: Response) => {
         return res.status(err.status).send(err.msg);
     }
 };
+
+
+/**
+ *  getPassword
+ * @param req 
+ * @param res 
+ */
+export const getPassword = async (req: Request, res: Response) => {
+    try {
+        return res.status(200).send();
+    } catch (err) {
+        return res.status(err.status).send(err.msg);
+    }
+}
+
+/**
+ * updateStatus
+ * @param req 
+ * @param res 
+ */
+export const updateStatus = async (req: Request, res: Response) => {
+    try {
+        return res.status(200).send();
+    } catch (err) {
+        return res.status(err.status).send(err.msg);
+    }
+}
+
+/**
+ * deleteUser
+ * @param req 
+ * @param res 
+ */
+export const deleteUser = async (req: Request, res: Response) => {
+    try {
+        return res.status(200).send();
+    } catch (err) {
+        return res.status(err.status).send(err.msg);
+    }
+}
+
+/**
+ * getUser
+ * @param req 
+ * @param res 
+ */
+export const getUser = async (req: Request, res: Response) => {
+    try {
+        return res.status(200).send();
+    } catch (err) {
+        return res.status(err.status).send(err.msg);
+    }
+}
+
+//END  SIP USERS
 
 /**
  * Get all customer

@@ -29,6 +29,7 @@ export const SipDomainSchema: Schema = new Schema({
 
 export const Customer = model<CustomerDocument>("Customer", CustomerSchema, 'Sip_Register');
 export const SipDomain = model<SipDomainDocument>("SipDomain", SipDomainSchema, 'Sip_domain');
+
 /*
 Call_id
 domain_name

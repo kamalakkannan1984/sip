@@ -11,6 +11,9 @@
         "strictNullChecks": false,
         "skipLibCheck": true,
         "target": "es5",
+        "module": "commonjs",
+        "strict": true,
+        "resolveJsonModule": true,
         "downlevelIteration": true,
         "typeRoots": [
             "node_modules/@types"

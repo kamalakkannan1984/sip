@@ -1,6 +1,8 @@
-FROM alpine:latest
+#FROM alpine:latest
 
-RUN apk add --no-cache nodejs yarn
+FROM node:10
+
+#RUN apk add --no-cache nodejs yarn
 
 WORKDIR /usr/src/app
 
