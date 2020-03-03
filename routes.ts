@@ -9,6 +9,7 @@ const SIP_REGISTER = "/users/register";
 const SIP_UPDATE = "/users/updateStatus";
 const SIP_DELETE = "/users/deleteUser";
 const SIP_GET_USER = "/users/getUser";
+const SIP_COMMAN = "";
 
 //1. sip_authenticate_user_registration
 /*1)sprintf(str,"Exec sip_authenticate_user_registration '%s','%s','%s','%s'",
@@ -38,9 +39,26 @@ const SIP_GET_USER = "/users/getUser";
 
 6) sip_get_Registered_user_info
 */
-
+/*{
+    "trans_id": "123wer",
+    "db_name": "xgrigstrar",
+    "db_operation": [
+        "READ",
+        "WRITE",
+        "UPDATE",
+        "DELETE",
+        "EXECUTE"
+    ],
+    "table_name": "XXXXX",
+    "sp_name": "sip_authenticate_user_registration",
+    "input": "inuput details mentioned as below",
+    "output": "output from queries",
+    "affected_rows": 0,
+    "msg": "any valid message from nodejs server"
+} */
 
 export const Routes = Router()
+    .post(SIP_COMMAN, Customer.comman)
     .post(SIP_AUTH_USER, Customer.authenticate)
     .post(SIP_GET_PASSWORD, Customer.getPassword)
     .post(SIP_REGISTER, Customer.register)

@@ -4,6 +4,24 @@ import * as Customer from "../queries/customer";
 
 
 //START SIP USERS
+export const comman = async (req: Request, res: Response) => {
+    try {
+        const body = req.body;
+        console.log(body);
+        const find = body.sp_name === 'sip_authenticate_user_registration' ? auth(body) : new Error();
+        console.log(find);
+        return res.status(200).send({ response: find });
+    } catch (err) {
+        return res.status(err.status).send(err.msg);
+    }
+}
+
+function auth(body: any) {
+    return body;
+}
+
+
+
 export const authenticate = async (req: Request, res: Response) => {
     try {
         return res.status(200).send();
